@@ -1,11 +1,7 @@
 #!/bin/bash
 
-source activate nlp
-
-cd ..
-
-for i in {00..63}
+for i in {48..63}
 do
-  ( python src/parse.py -i "corpus/pubmed_"$i ) &
+  ( python3 src/parse.py -i "pubmed_"$i".tsv" ) &
 done
 wait
