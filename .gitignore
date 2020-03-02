@@ -1,5 +1,13 @@
 .vscode
 __pycache__
 
+*.out
+
 pubmed.tsv
 pubmed_**
+
+yahoo_qa.tsv
+yahoo_qa_**
+
+cdr.tsv
+cdr_**

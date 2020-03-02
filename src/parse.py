@@ -12,36 +12,40 @@ nlp = spacy.load("en_core_web_sm")
 
 
 def seed_patterns():
-    patterns, dataset = [], []
-    seed_patterns = pd.read_csv(
-        os.path.join(os.path.abspath(""), "data", "seed_patterns.tsv"), delimiter="\t", header=None).values
-    for seed_pattern in seed_patterns:
-        x, y, zs, sentence = seed_pattern
-        for z in zs.split("|"):
-            try:
-                tmp_sentence = sentence.replace(
-                    "X", x).replace("Y", y).replace("Z", z)
-                tmp_sentence.replace(tmp_sentence[0], tmp_sentence[0].upper())
+    patterns_pos, patterns_neg = [], []
+    seed_patterns_pos = pd.read_csv(
+        os.path.join(os.path.abspath(""), "data", "seed_patterns_pos.tsv"), delimiter="\t", header=None).values
+    seed_patterns_neg = pd.read_csv(
+        os.path.join(os.path.abspath(""), "data", "seed_patterns_neg.tsv"), delimiter="\t", header=None).values
 
-                doc = nlp(tmp_sentence)
-                edges = parse_sp(x, y, doc, nlp)
-                edges = [",".join(edge) for edge in edges]
+    for pattern, seed_patterns in [(patterns_pos, seed_patterns_pos), (patterns_neg, seed_patterns_neg)]:
+        for seed_pattern in seed_patterns:
+            x, y, zs, sentence = seed_pattern
 
-                dataset.append([x, y, tmp_sentence, "1"])
-                if edges not in patterns and len(edges) > 1:
-                    patterns.append(edges)
+            for z in zs.split("|"):
+                try:
+                    tmp_sentence = sentence.replace(
+                        "X", x).replace("Y", y).replace("Z", z)
+                    tmp_sentence.replace(tmp_sentence[0], tmp_sentence[0].upper())
 
-            except Exception as e:
-                pass
+                    doc = nlp(tmp_sentence)
+                    edges = parse_sp(x, y, doc, nlp)
+                    edges = [",".join(edge) for edge in edges]
 
-    return patterns
+                    if edges not in pattern and len(edges) > 1:
+                        pattern.append(edges)
+
+                except Exception as e:
+                    pass
+
+    return patterns_pos, patterns_neg
 
 
-def pattern_intersect(edges, patterns, threshold=0.5):
+def pattern_intersect(edges, patterns, threshold=1.0):
     for i, pattern in enumerate(patterns):
-        if len(list(set(edges).intersection(pattern))) / len(pattern) > threshold:
-            return True
-    return False
+        if len(list(set(edges).intersection(pattern))) / len(pattern) >= threshold:
+            return pattern
+    return None
 
 
 if __name__ == "__main__":
@@ -50,38 +54,67 @@ if __name__ == "__main__":
                         help="input file to parse")
     args = vars(parser.parse_args())
 
-    patterns = seed_patterns()
+    patterns_pos, patterns_neg = seed_patterns()
 
     raw_sentences = open(os.path.join(os.path.abspath(""),
-                                      "corpus", args["input_file"]), "r")
-
-    new_dataset = open(os.path.join(os.path.abspath(""),
-                                    "data", args["input_file"]), "w")
+                                      "corpus", args["input_file"]), "rb")
+    pos_dataset = open(os.path.join(os.path.abspath(""),
+                                    "data", args["input_file"][:-4] + "_pos.tsv"), "w")
+    neg_dataset = open(os.path.join(os.path.abspath(""),
+                                    "data", args["input_file"][:-4] + "_neg.tsv"), "w")
+    pos_neg_dataset = open(os.path.join(os.path.abspath(""),
+                                    "data", args["input_file"][:-4] + "_pos_neg.tsv"), "w")
 
     for raw_sentence in raw_sentences.readlines():
         try:
-            doc = nlp(raw_sentence)
+            doc = nlp(raw_sentence.decode(errors="ignore"))
             sentences = [sent.string.strip() for sent in doc.sents]
 
             for sentence in sentences:
                 doc = nlp(sentence)
                 noun_chunks = list(doc.noun_chunks)
+                flag = False
 
                 for i, x in enumerate(noun_chunks):
                     for j, y in enumerate(noun_chunks):
+
                         if i == j:
+                            continue
+
+                        if flag:
                             continue
 
                         edges = parse_sp(
                             x.root.lower_, y.root.lower_, doc, nlp)
                         edges = [",".join(edge) for edge in edges]
 
-                        if pattern_intersect(edges, patterns):
-                            new_dataset.write(
-                                "\t".join([x.root.lower_, y.root.lower_, sentence, "1"]) + "\n")
-                            new_dataset.flush()
+                        ppos = pattern_intersect(edges, patterns_pos)
+                        pneg = pattern_intersect(edges, patterns_neg)
+                        if ppos is not None:
+                            if "not" not in str(ppos):
+                                pos_dataset.write(
+                                    "\t".join([x.root.lower_, y.root.lower_, sentence, str(ppos), "1"]) + "\n")
+                                pos_dataset.flush()
+    
+                            else:
+                                pos_neg_dataset.write(
+                                    "\t".join([x.root.lower_, y.root.lower_, sentence, str(ppos), "0"]) + "\n")
+                                pos_neg_dataset.flush()
+                            
+                            flag = True
+
+                        elif pneg is not None:
+                            neg_dataset.write(
+                                "\t".join([x.lower_, y.lower_, sentence, str(pneg), "0"]) + "\n")
+                            neg_dataset.flush()
+                            flag = True
+    
+                        else:
+                            continue
 
         except Exception as e:
             pass
 
-    new_dataset.close()
+    pos_dataset.close()
+    neg_dataset.close()
+    pos_neg_dataset.close()

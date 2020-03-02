@@ -1,0 +1,19 @@
+evacuation	injuries	sparked by|sparked from|set off by|set off from|started by|started from|resulting from|caused by|caused from|produced by|created by|produced from|created from|brought about by|triggered by|provoked by|precipitated by|prompted by|prompted from|incited from|incited by	Plaintiffs seek compensatory damages for X, property damage, emotional distress, and expenses Z the Y after the explosion.
+evacuation	damage	sparked by|sparked from|set off by|set off from|started by|started from|resulting from|caused by|caused from|produced by|created by|produced from|created from|brought about by|triggered by|provoked by|precipitated by|prompted by|prompted from|incited from|incited by	Plaintiffs seek compensatory damages for personal injuries, X, emotional distress, and expenses Z the Y after the explosion.
+evacuation	distress	sparked by|sparked from|set off by|set off from|started by|started from|resulting from|caused by|caused from|produced by|created by|produced from|created from|brought about by|triggered by|provoked by|precipitated by|prompted by|prompted from|incited from|incited by	Plaintiffs seek compensatory damages for personal injuries, property damage, X, and expenses Z the Y after the explosion.
+evacuation	expenses	sparked by|sparked from|set off by|set off from|started by|started from|resulting from|caused by|caused from|produced by|created by|produced from|created from|brought about by|triggered by|provoked by|precipitated by|prompted by|prompted from|incited from|incited by	Plaintiffs seek compensatory damages for personal injuries, property damage, emotional distress, and X Z the Y after the explosion.
+explosions	injuries	caused|brought about|precipitated|incited|triggered|prompted	The X Z Y, damage and expenses.
+explosions	damage	caused|brought about|precipitated|incited|triggered|prompted	The X Z injuries, Y and expenses.
+explosions	expenses	caused|brought about|precipitated|incited|triggered|prompted	The X Z injuries, damage and Y.
+arrival	tardiness	caused|brought about|precipitated|incited|triggered|prompted	The Y however has been Z by the Y of my old man; who in true Bloodworth fashion has had me walking everywhere.
+idea	response	precipitated|incited|triggered|prompted	The X Z his Y.
+idea	response	instigated|induced|influenced|impeded|prevented|mitigated|precipitated|incited|triggered|prompted	The Y is Z by X.
+idea	response	instigated|induced|influenced|impeded|mitigated|precipitated|incited|triggered|prompted|produced	The X is Z by X.
+fire	damage	due to|following the|as a result of|sparked by|sparked from|set off by|set off from|started by|started from|resulting from|caused by|caused from|produced by|created by|brought about by|triggered by|provoked by|precipitated by|prompted by|prompted from|incited from|incited by	The Y, Z X, are unfortunate.
+expenses	saddness	Instigated by|Induced by|Influenced by|Impeded by|Prevented by|Due to|From the|Resulting from|Following the|Sparked by|Sparked from|Set off by|Set off from|Started by|Started from|Resulting from|As a resut of|Because of|Caused by|Caused from|Brought about by|Triggered by|Triggered from|Provoked by|Precipitated by|Prompted by|Prompted from|Incited from|Incited by	Z the X, we observe Y.
+medicine	sickness	instigated|induced|influenced|impeded|mitigated|caused|precipitated|incited|triggered|prompted	Meanwhile, it was observed that the Y was Z by X.
+fire	damage	due to|caused by|brought about by|created by|because of|the reason for|thanks to	The Y is Z X.
+fire	damage	cause|origin|culprit|root|source|creator|producer|progenitor|starter	The X is Z of Y.
+fire	damage	result|product|outcome|reaction|aftereffect|aftermath|outgrowth|payoff|repercussion|fruition|fruit|corollary|by-product	The X is the Z of Y.
+medicine	sickness	cause|result|product|influence	Our observation suggests that X could be the Z of the Y associated with tramadol use.
+Fire	damage	cause of|reason for	X is the Z the Y.

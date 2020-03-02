@@ -9,6 +9,6 @@ do
   wget "ftp://ftp.ncbi.nlm.nih.gov/pubmed/baseline/pubmed20n"$i".xml.gz" >> $pid".log" 2>&1
   gunzip "pubmed20n"$i".xml.gz" >> $pid".log" 2>&1
   cd ..
-  python3 corpus/clean.py -i "pubmed20n"$i".xml" >> "corpus/"$pid".log" 2>&1
+  python3 corpus/corpus_pubmed_clean.py -i "pubmed20n"$i".xml" >> "corpus/"$pid".log" 2>&1
   cd corpus
 done

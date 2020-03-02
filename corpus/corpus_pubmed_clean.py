@@ -9,7 +9,7 @@ def is_ascii(s):
 
 
 def hasSpecialCharacter(inputString):
-    specials = '[@_#$%^&*<>}(){~:]'
+    specials = "[@_#$%^&*<>}(){~:]"
     return any(char in specials for char in inputString)
 
 
