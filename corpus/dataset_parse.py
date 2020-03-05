@@ -4,11 +4,12 @@ import pickle
 import numpy as np
 import pandas as pd
 from argparse import ArgumentParser
-from parse_utils import parse_sp
+from corpus_parse_util import parse_sp
 
 
 np.random.seed(42)
 nlp = spacy.load("en_core_web_sm")
+nlp.disable_pipes("ner")
 
 
 def seed_patterns():
@@ -48,22 +49,14 @@ def pattern_intersect(edges, patterns, threshold=1.0):
     return None
 
 
-if __name__ == "__main__":
-    parser = ArgumentParser()
-    parser.add_argument("-i", "--input_file", required=True,
-                        help="input file to parse")
-    args = vars(parser.parse_args())
-
-    patterns_pos, patterns_neg = seed_patterns()
-
-    raw_sentences = open(os.path.join(os.path.abspath(""),
-                                      "corpus", args["input_file"]), "rb")
+def parse(patterns_pos, patterns_neg, raw_sentences):
+    nlp.add_pipe(nlp.create_pipe("merge_noun_chunks"))
     pos_dataset = open(os.path.join(os.path.abspath(""),
-                                    "data", args["input_file"][:-4] + "_pos.tsv"), "w")
+                                    "corpus", args["input_file"][:-4] + "_pos.tsv"), "w")
     neg_dataset = open(os.path.join(os.path.abspath(""),
-                                    "data", args["input_file"][:-4] + "_neg.tsv"), "w")
+                                    "corpus", args["input_file"][:-4] + "_neg.tsv"), "w")
     pos_neg_dataset = open(os.path.join(os.path.abspath(""),
-                                    "data", args["input_file"][:-4] + "_pos_neg.tsv"), "w")
+                                        "corpus", args["input_file"][:-4] + "_pos_neg.tsv"), "w")
 
     for raw_sentence in raw_sentences.readlines():
         try:
@@ -85,7 +78,7 @@ if __name__ == "__main__":
                             continue
 
                         edges = parse_sp(
-                            x.root.lower_, y.root.lower_, doc, nlp)
+                            x.lower_, y.lower_, doc, nlp)
                         edges = [",".join(edge) for edge in edges]
 
                         ppos = pattern_intersect(edges, patterns_pos)
@@ -93,14 +86,14 @@ if __name__ == "__main__":
                         if ppos is not None:
                             if "not" not in str(ppos):
                                 pos_dataset.write(
-                                    "\t".join([x.root.lower_, y.root.lower_, sentence, str(ppos), "1"]) + "\n")
+                                    "\t".join([x.lower_, y.lower_, sentence, str(ppos), "1"]) + "\n")
                                 pos_dataset.flush()
-    
+
                             else:
                                 pos_neg_dataset.write(
-                                    "\t".join([x.root.lower_, y.root.lower_, sentence, str(ppos), "0"]) + "\n")
+                                    "\t".join([x.lower_, y.lower_, sentence, str(ppos), "0"]) + "\n")
                                 pos_neg_dataset.flush()
-                            
+
                             flag = True
 
                         elif pneg is not None:
@@ -108,7 +101,7 @@ if __name__ == "__main__":
                                 "\t".join([x.lower_, y.lower_, sentence, str(pneg), "0"]) + "\n")
                             neg_dataset.flush()
                             flag = True
-    
+
                         else:
                             continue
 
@@ -118,3 +111,17 @@ if __name__ == "__main__":
     pos_dataset.close()
     neg_dataset.close()
     pos_neg_dataset.close()
+
+
+if __name__ == "__main__":
+    parser = ArgumentParser()
+    parser.add_argument("-i", "--input_file", required=True,
+                        help="input file to parse")
+    args = vars(parser.parse_args())
+
+    patterns_pos, patterns_neg = seed_patterns()
+
+    raw_sentences = open(os.path.join(os.path.abspath(""),
+                                      "corpus", args["input_file"]), "rb")
+    parse(patterns_pos, patterns_neg, raw_sentences)
+    raw_sentences.close()

@@ -1,6 +1,5 @@
 import os
 import spacy
-from spacy.matcher import PhraseMatcher
 import numpy as np
 from networkx import Graph, DiGraph, descendants, shortest_path
 
@@ -19,57 +18,13 @@ DEP = {'acl': 0, 'acomp': 1, 'advcl': 2, 'advmod': 3, 'agent': 4, 'amod': 5, 'ap
 
 
 def parse_sp(x, y, doc, nlp):
-    # Find x and y phrase chunks in sentence
-    matcher = PhraseMatcher(nlp.vocab, attr="LOWER")
-    matcher.add("X", None, nlp(x), nlp(x + "s"))
-    matcher.add("Y", None, nlp(y), nlp(y + "s"))
-    matches = matcher(doc)
-
-    # Delete overlapping matches
-    del_idx = []
-    for i in range(len(matches)):
-        (match_id_i, start_i, end_i) = matches[i]
-        for j in range(i + 1, len(matches)):
-            (match_id_j, start_j, end_j) = matches[j]
-            if end_i >= start_j and end_i >= end_j:
-                del_idx.append(j)
-            elif end_i >= start_j and end_i <= end_j:
-                if end_i - start_i >= end_j - start_j:
-                    del_idx.append(j)
-                else:
-                    del_idx.append(i)
-            else:
-                pass
-    matches = [match for idx, match in enumerate(
-        matches) if idx not in del_idx]
-    matches = sorted(matches, key=lambda z: z[1], reverse=True)
-
-    # Choose one chunk for x and one chunk for y
-    seen = set()
-    matches = [(a, b, c)
-               for a, b, c in matches if not (a in seen or seen.add(a))]
-    if len(matches) != 2:
-        return []
-
-    # Merge x and y chunks
-    for (match_id, start, end) in matches:
-        string_id = nlp.vocab.strings[match_id]
-        if string_id == "X":
-            x_span = doc[start:end]
-            x_span.merge(x_span.root.tag_, x_span.root.lemma_,
-                         x_span.root.ent_type_)
-        else:
-            y_span = doc[start:end]
-            y_span.merge(y_span.root.tag_, y_span.root.lemma_,
-                         y_span.root.ent_type_)
-
-    # Track x and y chunks
-    x = x_span.lower_ + str(x_span.start)
-    y = y_span.lower_ + str(y_span.start)
-
-    #  Get directed and undirected graphs
+    # Get undirected graph
     graph_edges = []
     for token in doc:
+        if x in token.lower_:
+            x = token.lower_
+        if y in token.lower_:
+            y = token.lower_
         for child in token.children:
             graph_edges.append((token.lower_ + str(token.i),
                                 child.lower_ + str(child.i)))
@@ -81,32 +36,32 @@ def parse_sp(x, y, doc, nlp):
     for token in doc:
         for child in token.children:
             if token.lower_ + str(token.i) in sp and child.lower_ + str(child.i) in sp:
-                if token.lower_ == x_span.lower_ and child.lower_ == y_span.lower_:
+                if token.lower_ == x.lower_ and child.lower_ == y.lower_:
                     p.append(("x",
                               token.pos_.lower(),
                               child.dep_,
                               "y"))
-                elif token.lower_ == y_span.lower_ and child.lower_ == x_span.lower_:
+                elif token.lower_ == y.lower_ and child.lower_ == x.lower_:
                     p.append(("y",
                               token.pos_.lower(),
                               child.dep_,
                               "x"))
-                elif token.lower_ == x_span.lower_:
+                elif token.lower_ == x.lower_:
                     p.append(("x",
                               token.pos_.lower(),
                               child.dep_,
                               child.lemma_.lower()))
-                elif child.lower_ == x_span.lower_:
+                elif child.lower_ == x.lower_:
                     p.append((token.lemma_.lower(),
                               token.pos_.lower(),
                               child.dep_,
                               "x"))
-                elif token.lower_ == y_span.lower_:
+                elif token.lower_ == y.lower_:
                     p.append(("y",
                               token.pos_.lower(),
                               child.dep_,
                               child.lemma_.lower()))
-                elif child.lower_ == y_span.lower_:
+                elif child.lower_ == y.lower_:
                     p.append((token.lemma_.lower(),
                               token.pos_.lower(),
                               child.dep_,

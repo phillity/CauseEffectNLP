@@ -19,26 +19,7 @@ wait
 cat *.tsv > pubmed.tsv
 rm *.log
 rm pubmed2*
-fi=pubmed.tsv
-num_files=64
-total_lines=$(wc -l <${fi})
-((lines_per_file = (total_lines + num_files - 1) / num_files))
-split -d --lines=${lines_per_file} ${fi} --additional-suffix=.tsv pubmed_
-rm pubmed.tsv
-
 
 wget http://cs.iupui.edu/~phillity/yahoo_qa.tsv
-fi=yahoo_qa.tsv
-num_files=64
-total_lines=$(wc -l <${fi})
-((lines_per_file = (total_lines + num_files - 1) / num_files))
-split -d --lines=${lines_per_file} ${fi} --additional-suffix=.tsv yahoo_qa_
-rm yahoo_qa.tsv
-
 wget http://cs.iupui.edu/~phillity/cdr.tsv
-fi=cdr.tsv
-num_files=64
-total_lines=$(wc -l <${fi})
-((lines_per_file = (total_lines + num_files - 1) / num_files))
-split -d --lines=${lines_per_file} ${fi} --additional-suffix=.tsv cdr_
-rm cdr.tsv
+wget http://cs.iupui.edu/~phillity/ade.tsv
