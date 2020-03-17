@@ -13,12 +13,12 @@ do
 done
 wait
 
-cat "corpus/"$dataset"_ce_"**"_pos.tsv" > "corpus/"$dataset"_ce_pos.tsv"
-cat "corpus/"$dataset"_ce_"**"_neg.tsv" > "corpus/"$dataset"_ce_neg.tsv"
-cat "corpus/"$dataset"_hyp_"**"_pos.tsv" > "corpus/"$dataset"_hyp_pos.tsv"
-cat "corpus/"$dataset"_hyp_"**"_neg.tsv" > "corpus/"$dataset"_hyp_neg.tsv"
-cat "corpus/"$dataset"_me_"**"_pos.tsv" > "corpus/"$dataset"_me_pos.tsv"
-cat "corpus/"$dataset"_me_"**"_neg.tsv" > "corpus/"$dataset"_me_neg.tsv"
+cat "corpus/"$dataset"_"**"_ce_pos.tsv" > "corpus/"$dataset"_ce_pos.tsv"
+cat "corpus/"$dataset"_"**"_ce_neg.tsv" > "corpus/"$dataset"_ce_neg.tsv"
+cat "corpus/"$dataset"_"**"_hyp_pos.tsv" > "corpus/"$dataset"_hyp_pos.tsv"
+cat "corpus/"$dataset"_"**"_hyp_neg.tsv" > "corpus/"$dataset"_hyp_neg.tsv"
+cat "corpus/"$dataset"_"**"_me_pos.tsv" > "corpus/"$dataset"_me_pos.tsv"
+cat "corpus/"$dataset"_"**"_me_neg.tsv" > "corpus/"$dataset"_me_neg.tsv"
 
 for i in $(seq -f "%02g" 0 $(($thread - 1)))
 do
