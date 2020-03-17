@@ -22,9 +22,9 @@ def parse_sp(x, y, doc, nlp):
     graph_edges = []
     for token in doc:
         if x in token.lower_:
-            x = token.lower_
+            x = token.lower_ + str(token.i)
         if y in token.lower_:
-            y = token.lower_
+            y = token.lower_ + str(token.i)
         for child in token.children:
             graph_edges.append((token.lower_ + str(token.i),
                                 child.lower_ + str(child.i)))
@@ -36,32 +36,32 @@ def parse_sp(x, y, doc, nlp):
     for token in doc:
         for child in token.children:
             if token.lower_ + str(token.i) in sp and child.lower_ + str(child.i) in sp:
-                if token.lower_ == x.lower_ and child.lower_ == y.lower_:
+                if token.lower_ + str(token.i) == x and child.lower_ + str(child.i) == y:
                     p.append(("x",
                               token.pos_.lower(),
                               child.dep_,
                               "y"))
-                elif token.lower_ == y.lower_ and child.lower_ == x.lower_:
+                elif token.lower_ + str(token.i) == y and child.lower_ + str(child.i) == x:
                     p.append(("y",
                               token.pos_.lower(),
                               child.dep_,
                               "x"))
-                elif token.lower_ == x.lower_:
+                elif token.lower_ + str(token.i) == x:
                     p.append(("x",
                               token.pos_.lower(),
                               child.dep_,
                               child.lemma_.lower()))
-                elif child.lower_ == x.lower_:
+                elif child.lower_ + str(child.i) == x:
                     p.append((token.lemma_.lower(),
                               token.pos_.lower(),
                               child.dep_,
                               "x"))
-                elif token.lower_ == y.lower_:
+                elif token.lower_ + str(token.i) == y:
                     p.append(("y",
                               token.pos_.lower(),
                               child.dep_,
                               child.lemma_.lower()))
-                elif child.lower_ == y.lower_:
+                elif child.lower_ + str(child.i) == y:
                     p.append((token.lemma_.lower(),
                               token.pos_.lower(),
                               child.dep_,

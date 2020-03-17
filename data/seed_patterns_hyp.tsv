@@ -1,0 +1,20 @@
+whale	mammal	is a kind of|is a type of	A X Z Y that can swim.
+enus	Birds	like|such as|similar to	Y Z X can't fly.
+AB-	Blood	of type|of category|of subtype|	Y Z X is rare to find.
+Hydrophobia	phobia	is a subtype of|is a sub-category of	X Z Y in which one is afraid of water.
+Zoology	biology	comes under|falls under|is categorized under	X Z Y.
+Roses	flowers	kind of|type of	X are the best Z Y.
+cats	animals	Like many|A kind of|A type of|A class of|A subtype of|Like most|Like all|Unlike most|Unlike many|Unlike all|Like all	Z Y, X are interesting.
+Cats	animal	a type of|a class of|a subtype of|a variation of|which is|a kind of	X, Z Y, are interesting.
+Cats	animal	are a type of|are a class of|are a family of|are a species of|are a kind of 	X Z Y that are interesting.
+cats	Animals	such as|like|including|especially|mainly|mostly|chiefly|principally 	Y, Z X, are interesting.
+Cats	animal	sort|type|variety|style|form|class|category|genre|genus|species|race|breed|family|strain|brand|make|model|version	X are a Z of Y.
+Cats	animals	sort|type|variety|style|form|class|category|genre|genus|species|race|breed|family|strain|brand|make|model|version	X, a Z of Y, are interesting.
+Diamonds	coal	form of	X are considered the most beautiful Z of Y.
+Humans	spieces	kind of|type of	X are a Z Y.
+Newton	Scientists	like|such as	Y Z X are what the world needs.
+England	Countries	such as|like	Y Z X are very beautiful.
+lions	Predators	especially	Y, Z X are very dangerous.
+lions	Predators	like|such as	Y Z X are very dangerous.
+USA	Countries	including	Y, Z X, have adopted modern waste management techniques.
+Computers	calculators	just|like	X are Z Y.

@@ -7,6 +7,7 @@ from networkx import Graph, DiGraph, descendants, shortest_path
 
 
 np.random.seed(42)
+tf.random.set_seed(42)
 
 
 # part of speech dict
@@ -22,6 +23,7 @@ USE = hub.load(os.path.join(os.path.abspath(""), "model", "5"))
 
 def path_embedding(edges, use_map):
     path_emb = np.zeros((edges.shape[0], 1100))
+    mask = np.zeros((edges.shape[0],), dtype=bool)
 
     words = np.unique(edges[:, [0, -1]])
     words_missing = list(set(words) - set(use_map.keys()))
@@ -31,15 +33,21 @@ def path_embedding(edges, use_map):
             use_map[word] = words_emb[i]
 
     for i, edge in enumerate(edges):
-        pos = np.zeros((len(POS),))
-        pos[POS[edge[1]]] = 1.0
+        try:
+            pos = np.zeros((len(POS),))
+            pos[POS[edge[1]]] = 1.0
 
-        dep = np.zeros((len(DEP),))
-        dep[DEP[edge[2]]] = 1.0
+            dep = np.zeros((len(DEP),))
+            dep[DEP[edge[2]]] = 1.0
 
-        path_emb[i] = np.hstack(
-            [use_map[edge[0]], pos, dep, use_map[edge[3]]])
+            path_emb[i] = np.hstack(
+                [use_map[edge[0]], pos, dep, use_map[edge[3]]])
+            mask[i] = True
 
+        except Exception as e:
+            pass
+
+    path_emb = path_emb[mask]
     return path_emb, use_map
 
 
@@ -47,9 +55,9 @@ def parse_sentence(x, y, doc, nlp):
     # Get directed and undirected graphs
     graph_edges = []
     for token in doc:
-        if x in token.lower_:
+        if x.lower() in token.lower_:
             x = token.lower_ + str(token.i)
-        if y in token.lower_:
+        if y.lower() in token.lower_:
             y = token.lower_ + str(token.i)
         for child in token.children:
             graph_edges.append((token.lower_ + str(token.i),
@@ -63,10 +71,10 @@ def parse_sentence(x, y, doc, nlp):
     for token in doc:
         for child in token.children:
             if token.lower_ + str(token.i) in sp and child.lower_ + str(child.i) in sp:
-                p.append((token.lower_,
+                p.append((token.lemma_.lower(),
                           token.pos_.lower(),
                           child.dep_,
-                          child.lower_))
+                          child.lemma_.lower()))
 
     # Descendants of x and y
     xd = sorted(descendants(directed_graph, x), key=lambda z: int(z[-1]))
@@ -78,10 +86,10 @@ def parse_sentence(x, y, doc, nlp):
                 for token in doc:
                     for child in token.children:
                         if token.lower_ + str(token.i) == t and child.lower_ + str(child.i) == c:
-                            edge = (token.lower_,
+                            edge = (token.lemma_.lower(),
                                     token.pos_.lower(),
                                     child.dep_,
-                                    child.lower_)
+                                    child.lemma_.lower())
                             if edge not in p:
                                 p.append(edge)
     return np.array(p)

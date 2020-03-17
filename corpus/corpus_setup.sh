@@ -1,5 +1,7 @@
 #!/bin/bash
 
+thread=$1
+
 cd corpus
 
 bash corpus_pubmed_util.sh 1 100 1 &
@@ -20,6 +22,12 @@ cat *.tsv > pubmed.tsv
 rm *.log
 rm pubmed2*
 
-wget http://cs.iupui.edu/~phillity/yahoo_qa.tsv
-wget http://cs.iupui.edu/~phillity/cdr.tsv
 wget http://cs.iupui.edu/~phillity/ade.tsv
+wget http://cs.iupui.edu/~phillity/cdr.tsv
+wget http://cs.iupui.edu/~phillity/yahoo_qa.tsv
+
+cd ..
+
+bash corpus/dataset_parse.sh cdr $thread
+bash corpus/dataset_parse.sh yahoo_qa $thread
+bash corpus/dataset_parse.sh pubmed $thread

@@ -1,0 +1,10 @@
+cheese	Pizza	contains|consists of|has	Y Z many ingridents, one of which is X.
+mercury	amalgum	is composed of|constitutes of|made up of	The alloy Y, Z X.
+wheel	car	ingredient|peripheral|piece|part|segment	A X is a Z of a Y.
+Wheels	car	ingredient|peripheral|piece|part|segment	X are a Z of a Y.
+Wheels	cars	ingredient|peripheral|piece|part|segment	Y, a Z of a X, are interesting.
+wheels	cars	made up of|built from|composed of	Y, Z X, are interesting.
+pages	Books	are made up of|consist of	Y Z hundreds of X.
+cells	sheet	make up	Many X Z a Y.
+points	line	make	A series of X Z a Y.
+NLP	Al	field of	X is a Z Y.
