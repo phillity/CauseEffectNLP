@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source activate nlp
+
 thread=$1
 
 cd corpus
@@ -31,3 +33,10 @@ cd ..
 bash corpus/dataset_parse.sh cdr $thread
 bash corpus/dataset_parse.sh yahoo_qa $thread
 bash corpus/dataset_parse.sh pubmed $thread
+
+python dataset_split.py cdr_ce
+python dataset_split.py cdr_hyp
+python dataset_split.py yahoo_qa_ce
+python dataset_split.py yahoo_qa_hyp
+python dataset_split.py pubmed_ce
+python dataset_split.py pubmed_hyp

@@ -140,7 +140,7 @@ def dataset_split(dataset):
 
 if __name__ == "__main__":
     parser = ArgumentParser()
-    parser.add_argument("-d", "--dataset", required=True, choices=["yahoo_qa", "pubmed", "cdr", "ade"],
+    parser.add_argument("-d", "--dataset", required=True,
                         help="dataset to split")
     args = vars(parser.parse_args())
 

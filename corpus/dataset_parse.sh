@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source activate nlp
+
 dataset=$1
 thread=$2
 
@@ -9,7 +11,7 @@ split -d --lines=${lines_per_file} "corpus/"${dataset}".tsv" --additional-suffix
 
 for i in $(seq -f "%02g" 0 $(($thread - 1)))
 do
-  ( python3 corpus/dataset_parse.py -i $dataset"_"$i".tsv" ) &
+  ( python corpus/dataset_parse.py -i $dataset"_"$i".tsv" ) &
 done
 wait
 

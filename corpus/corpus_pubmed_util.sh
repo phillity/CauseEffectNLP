@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source activate nlp
+
 start=$1
 stop=$2
 pid=$3
@@ -9,6 +11,6 @@ do
    wget "ftp://ftp.ncbi.nlm.nih.gov/pubmed/baseline/pubmed20n"$i".xml.gz" >> $pid".log" 2>&1
   gunzip "pubmed20n"$i".xml.gz" >> $pid".log" 2>&1
   cd ..
-  python3 corpus/corpus_pubmed_clean.py -i "pubmed20n"$i".xml" >> "corpus/"$pid".log" 2>&1
+  python corpus/corpus_pubmed_clean.py -i "pubmed20n"$i".xml" >> "corpus/"$pid".log" 2>&1
   cd corpus
 done
