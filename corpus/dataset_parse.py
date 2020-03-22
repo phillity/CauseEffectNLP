@@ -79,7 +79,7 @@ def parse(patterns_all, raw_sentences):
                         edges = [",".join(edge) for edge in edges]
 
                         patt_ce = pattern_intersect(edges, patterns["ce"])
-                        patt_hyp = pattern_intersect(edges, patterns["hpy"])
+                        patt_hyp = pattern_intersect(edges, patterns["hyp"])
                         patt_me = pattern_intersect(edges, patterns["me"])
 
                         if patt_ce is not None:
@@ -88,18 +88,18 @@ def parse(patterns_all, raw_sentences):
                                     "\t".join([x.lower_, y.lower_, sentence, str(patt_ce), "1"]) + "\n")
                                 rel_pos["ce"].flush()
 
-                                rel_neg["hpy"].write(
+                                rel_neg["hyp"].write(
                                     "\t".join([x.lower_, y.lower_, sentence, str(patt_ce), "0"]) + "\n")
-                                rel_neg["hpy"].flush()
+                                rel_neg["hyp"].flush()
                                 rel_neg["me"].write(
                                     "\t".join([x.lower_, y.lower_, sentence, str(patt_ce), "0"]) + "\n")
                                 rel_neg["me"].flush()
 
                         if patt_hyp is not None:
                             if "not" not in str(sentence):
-                                rel_pos["hpy"].write(
+                                rel_pos["hyp"].write(
                                     "\t".join([x.lower_, y.lower_, sentence, str(patt_hyp), "1"]) + "\n")
-                                rel_pos["hpy"].flush()
+                                rel_pos["hyp"].flush()
 
                                 rel_neg["ce"].write(
                                     "\t".join([x.lower_, y.lower_, sentence, str(patt_hyp), "0"]) + "\n")
@@ -114,13 +114,12 @@ def parse(patterns_all, raw_sentences):
                                     "\t".join([x.lower_, y.lower_, sentence, str(patt_me), "1"]) + "\n")
                                 rel_pos["me"].flush()
 
-                            else:
                                 rel_neg["ce"].write(
                                     "\t".join([x.lower_, y.lower_, sentence, str(patt_me), "0"]) + "\n")
                                 rel_neg["ce"].flush()
-                                rel_neg["hpy"].write(
+                                rel_neg["hyp"].write(
                                     "\t".join([x.lower_, y.lower_, sentence, str(patt_me), "0"]) + "\n")
-                                rel_neg["hpy"].flush()
+                                rel_neg["hyp"].flush()
 
         except Exception as e:
             pass
